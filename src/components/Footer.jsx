@@ -27,8 +27,10 @@ export const Footer = () => {
   };
 
   const onCta = () => {
-    if (onHome) navigate('/get-started');
-    else window.scrollTo({ top: 0, behavior: 'smooth' });
+    // On the booking page the CTA returns to the form; everywhere
+    // else — homepage, 404 — it routes there.
+    if (pathname === '/get-started') window.scrollTo({ top: 0, behavior: 'smooth' });
+    else navigate('/get-started');
   };
 
   // Slow counter-drift on the CTA photo — rAF-throttled scroll parallax.
@@ -123,7 +125,15 @@ export const Footer = () => {
           </div>
         </div>
         <div className="border-t border-[rgba(255,255,255,.04)] px-14 py-3.5 text-center text-[11px] tracking-[.06em] text-faint">
-          Built by <span className="text-accent-hi">OSE.builds</span>
+          Built by{' '}
+          <a
+            href="https://confibiz.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent-hi no-underline transition-opacity duration-200 hover:underline hover:decoration-[rgba(255,75,75,.5)] hover:underline-offset-[3px] hover:opacity-85"
+          >
+            Confibiz
+          </a>
         </div>
       </footer>
     </>

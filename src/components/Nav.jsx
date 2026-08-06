@@ -17,6 +17,9 @@ export const Nav = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const onHome = pathname === '/';
+  // The booking page IS the CTA destination, so there its CTA returns to the form.
+  // Anywhere else — including the 404 — it has to actually route there.
+  const onBooking = pathname === '/get-started';
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 60);
@@ -46,8 +49,8 @@ export const Nav = () => {
 
   const onCta = () => {
     setMenuOpen(false);
-    if (onHome) navigate('/get-started');
-    else window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (onBooking) window.scrollTo({ top: 0, behavior: 'smooth' });
+    else navigate('/get-started');
   };
 
   return (

@@ -3,6 +3,7 @@ import { Nav } from './components/Nav';
 import { ScrollToHash } from './components/ScrollToHash';
 import Home from './pages/Home';
 import GetStarted from './pages/GetStarted';
+import NotFound from './pages/NotFound';
 
 /*
   Nav is shared across both routes — it was duplicated between the two
@@ -17,6 +18,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/get-started" element={<GetStarted />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
