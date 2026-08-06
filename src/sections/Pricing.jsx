@@ -24,7 +24,7 @@ const PCard = ({ p, delay, vis }) => {
       }}
     >
       {p.badge && (
-        <div className="absolute top-5 right-5 flex items-center gap-[5px] rounded-full border border-[rgba(200,255,0,.3)] bg-[rgba(200,255,0,.07)] px-3 py-[5px] text-[9px] font-semibold tracking-[.2em] text-accent uppercase">
+        <div className="absolute top-5 right-5 flex items-center gap-[5px] rounded-full border border-[rgba(255,75,75,.35)] bg-[rgba(214,40,40,.12)] px-3 py-[5px] text-[9px] font-semibold tracking-[.2em] text-accent-hi uppercase">
           <TrophyIcon />
           Most Effective
         </div>
@@ -48,7 +48,7 @@ const PCard = ({ p, delay, vis }) => {
       <button
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.03)';
-          if (p.badge) e.currentTarget.style.boxShadow = '0 0 28px rgba(200,255,0,.22)';
+          if (p.badge) e.currentTarget.style.boxShadow = '0 0 28px rgba(214,40,40,.38)';
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = 'scale(1)';
@@ -56,7 +56,7 @@ const PCard = ({ p, delay, vis }) => {
         }}
         onClick={() => navigate('/get-started')}
         className={`w-full rounded-[10px] p-[15px] text-xs font-bold tracking-[.16em] uppercase transition-[transform,box-shadow] duration-200 ease-css
-          ${p.badge ? 'border-none bg-accent text-bg' : 'border border-[rgba(255,255,255,.12)] bg-transparent text-text'}`}
+          ${p.badge ? 'border-none bg-accent text-on-accent' : 'border border-[rgba(255,255,255,.12)] bg-transparent text-text'}`}
       >
         Get Started
       </button>
@@ -86,7 +86,7 @@ export const Pricing = () => {
           {plans.map((p, i) =>
             p.badge ? (
               <div key={p.name} className="relative">
-                <div className="pointer-events-none absolute -inset-10 z-0 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(200,255,0,0.07)_0%,transparent_70%)]" />
+                <div className="pointer-events-none absolute -inset-10 z-0 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(214,40,40,0.13)_0%,transparent_70%)]" />
                 <div className="relative z-1">
                   <PCard p={p} delay={i * 100} vis={vis} />
                 </div>

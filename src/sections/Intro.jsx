@@ -88,13 +88,19 @@ export const Intro = () => {
           className="mb-5 text-[11px] font-medium tracking-[0.3em] text-[rgba(232,224,208,0.55)] uppercase"
           style={{ animation: 'introFadeUp 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.3s both' }}
         >
-          Personal Trainer &nbsp;·&nbsp; San Francisco
+          Marcus Kane &nbsp;·&nbsp; San Francisco
         </div>
+        {/*
+          Two-line lockup: "PERFORMANCE" is 11 characters, so the old
+          single-line clamp floor would run past a 375px viewport.
+        */}
         <h1
-          className="m-0 font-display text-[clamp(80px,12vw,152px)] leading-[0.88] tracking-[0.04em] text-text"
+          className="m-0 text-center font-display text-[clamp(54px,11vw,152px)] leading-[0.88] tracking-[0.04em] text-text"
           style={{ animation: 'introFadeUp 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.5s both' }}
         >
-          Jordan Lee
+          Apex
+          <br />
+          Performance
         </h1>
         <div
           className="mt-7 h-0.5 w-12 bg-accent"
@@ -118,11 +124,11 @@ export const Intro = () => {
           className="flex flex-col items-center gap-[3px]"
           style={{ animation: 'scrollPulse 1.8s ease-in-out infinite' }}
         >
-          <div className="h-7 w-px bg-[linear-gradient(to_bottom,rgba(200,255,0,0.6),rgba(200,255,0,0.1))]" />
+          <div className="h-7 w-px bg-[linear-gradient(to_bottom,rgba(255,75,75,0.7),rgba(255,75,75,0.1))]" />
           <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
             <path
               d="M1 1l4 4 4-4"
-              stroke="#C8FF00"
+              stroke="#FF4B4B"
               strokeWidth="1.2"
               strokeLinecap="round"
               strokeLinejoin="round"

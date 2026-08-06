@@ -5,7 +5,7 @@ import { FAQ } from '../components/FAQ';
 import { Footer } from '../components/Footer';
 
 export default function GetStarted() {
-  useDocumentTitle('Get Started — Jordan Lee Fitness');
+  useDocumentTitle('Get Started — Apex Performance');
 
   return (
     <div className="bg-bg">

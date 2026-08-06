@@ -116,7 +116,7 @@ export const About = () => {
                 </div>
                 {/* Location label */}
                 <div className="absolute bottom-4 left-3.5">
-                  <div className="mb-0.5 font-body text-[15px] font-bold text-text">Jordan&apos;s Gym</div>
+                  <div className="mb-0.5 font-body text-[15px] font-bold text-text">Apex Performance</div>
                   <div className="text-[11px] font-normal tracking-[0.04em] text-[rgba(232,224,208,0.5)]">
                     San Francisco, CA
                   </div>
@@ -137,7 +137,7 @@ export const About = () => {
           >
             <img
               src="/assets/handsome-man-exercising-gym.jpg"
-              alt="Jordan Lee"
+              alt="Marcus Kane"
               className="block h-full w-full object-cover object-[30%_50%] contrast-[1.05] saturate-[0.88]"
             />
           </div>
@@ -149,7 +149,7 @@ export const About = () => {
                 style={reveal(gridVis, 0, 'right')}
                 className="mb-7 font-body text-[clamp(34px,3.8vw,52px)] leading-none font-extrabold tracking-[-0.03em] text-ink"
               >
-                Jordan Lee
+                Marcus Kane
               </h3>
               <div style={reveal(gridVis, 0, 'right')}>
                 <p className="mb-4 text-[15px] leading-[1.82] font-light text-ink-muted">
@@ -170,17 +170,17 @@ export const About = () => {
               <button
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'scale(1.03)';
-                  e.currentTarget.style.boxShadow = '0 0 28px rgba(200,255,0,0.28)';
+                  e.currentTarget.style.boxShadow = '0 0 28px rgba(214,40,40,0.4)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
                   e.currentTarget.style.boxShadow = 'none';
                 }}
                 onClick={() => navigate('/get-started')}
-                className="inline-flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border-none bg-accent py-[13px] pr-3.5 pl-6 text-[13px] font-bold whitespace-nowrap text-bg transition-[transform,box-shadow] duration-200 ease-css"
+                className="inline-flex shrink-0 cursor-pointer items-center gap-2.5 rounded-full border-none bg-accent py-[13px] pr-3.5 pl-6 text-[13px] font-bold whitespace-nowrap text-on-accent transition-[transform,box-shadow] duration-200 ease-css"
               >
                 Get in Touch
-                <span className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full bg-bg text-sm text-accent">
+                <span className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full bg-bg text-sm text-accent-hi">
                   ↗
                 </span>
               </button>

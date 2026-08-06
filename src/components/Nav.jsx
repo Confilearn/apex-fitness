@@ -67,7 +67,7 @@ export const Nav = () => {
         {/* Logo — pinned left */}
         <div className="flex shrink-0 cursor-pointer items-center gap-2" onClick={onLogo}>
           <LogoMark />
-          <span className="font-body text-[15px] font-semibold text-text">Jordan Lee</span>
+          <span className="font-body text-[15px] font-semibold text-text">Apex Performance</span>
         </div>
 
         {/* Desktop: links + CTA */}
@@ -82,17 +82,17 @@ export const Nav = () => {
             </div>
             <button
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#C8FF00';
-                e.currentTarget.style.color = '#0D0D0B';
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(200,255,0,0.25)';
+                e.currentTarget.style.background = '#D62828';
+                e.currentTarget.style.color = '#FFF5F2';
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(214,40,40,0.38)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = '#C8FF00';
+                e.currentTarget.style.color = '#FF4B4B';
                 e.currentTarget.style.boxShadow = 'none';
               }}
               onClick={onCta}
-              className="shrink-0 rounded-full border-[1.5px] border-accent bg-transparent px-5 py-2 text-sm font-semibold text-accent transition-all duration-200 ease-css"
+              className="shrink-0 rounded-full border-[1.5px] border-accent-hi bg-transparent px-5 py-2 text-sm font-semibold text-accent-hi transition-all duration-200 ease-css"
             >
               Get Started
             </button>
@@ -129,7 +129,7 @@ export const Nav = () => {
             <button
               key={l}
               onClick={() => go(l.toLowerCase())}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#C8FF00')}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#FF4B4B')}
               onMouseLeave={(e) => (e.currentTarget.style.color = '#E8E0D0')}
               className="cursor-pointer border-none bg-transparent py-3 font-body text-[32px] font-semibold tracking-[-0.02em] text-text transition-colors duration-200"
             >
@@ -138,7 +138,7 @@ export const Nav = () => {
           ))}
           <button
             onClick={onCta}
-            className="mt-6 cursor-pointer rounded-full border-none bg-accent px-10 py-3.5 text-[15px] font-bold text-bg"
+            className="mt-6 cursor-pointer rounded-full border-none bg-accent px-10 py-3.5 text-[15px] font-bold text-on-accent"
           >
             Get Started
           </button>

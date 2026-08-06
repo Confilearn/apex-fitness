@@ -19,7 +19,7 @@ export const reveal = (vis, delay = 0, axis = 'y') => ({
 export const accentHover = {
   onMouseEnter: (e) => {
     e.currentTarget.style.transform = 'scale(1.03)';
-    e.currentTarget.style.boxShadow = '0 0 36px rgba(200,255,0,0.28)';
+    e.currentTarget.style.boxShadow = '0 0 36px rgba(214,40,40,0.4)';
   },
   onMouseLeave: (e) => {
     e.currentTarget.style.transform = 'scale(1)';

@@ -1,7 +1,7 @@
 /* Phosphor icon set — used consistently, never mixed with another set. */
 
 export const LogoMark = () => (
-  <svg width="28" height="28" viewBox="0 0 256 256" fill="#C8FF00">
+  <svg width="28" height="28" viewBox="0 0 256 256" fill="#D62828">
     <path d="M248,120h-8V88a16,16,0,0,0-16-16H208V64a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v56H104V64A16,16,0,0,0,88,48H64A16,16,0,0,0,48,64v8H32A16,16,0,0,0,16,88v32H8a8,8,0,0,0,0,16h8v32a16,16,0,0,0,16,16H48v8a16,16,0,0,0,16,16H88a16,16,0,0,0,16-16V136h48v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16v-8h16a16,16,0,0,0,16-16V136h8a8,8,0,0,0,0-16ZM32,168V88H48v80Zm56,24H64V64H88V192Zm104,0H168V64h24V192Zm32-24H208V88h16Z" />
   </svg>
 );
@@ -21,7 +21,7 @@ export const PlantIcon = () => (
   </svg>
 );
 
-export const TrophyIcon = ({ size = 11, fill = '#C8FF00', className = 'block shrink-0' }) => (
+export const TrophyIcon = ({ size = 11, fill = '#FF4B4B', className = 'block shrink-0' }) => (
   <svg width={size} height={size} viewBox="0 0 256 256" fill={fill} className={className}>
     <path d="M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8Zm144-8.9c0,35.52-29,64.64-64,64.9a64,64,0,0,1-64-64V56H192ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z" />
   </svg>
@@ -34,7 +34,7 @@ export const MedalIcon = () => (
 );
 
 export const CheckIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 256 256" fill="#C8FF00">
+  <svg width="14" height="14" viewBox="0 0 256 256" fill="#FF4B4B">
     <path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z" />
   </svg>
 );

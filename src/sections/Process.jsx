@@ -104,7 +104,7 @@ export const Process = () => {
               <div className="mb-0.5 font-body text-[clamp(18px,1.9vw,26px)] leading-[1.15] font-extrabold tracking-[-0.02em] text-text">
                 This Isn&apos;t Motivation.
               </div>
-              <div className="mb-2 font-body text-[clamp(18px,1.9vw,26px)] leading-[1.15] font-extrabold tracking-[-0.02em] text-accent">
+              <div className="mb-2 font-body text-[clamp(18px,1.9vw,26px)] leading-[1.15] font-extrabold tracking-[-0.02em] text-accent-hi">
                 It&apos;s Method.
               </div>
               <div className="mb-5 text-[11px] font-normal tracking-[0.04em] text-[rgba(232,224,208,0.4)]">
@@ -113,17 +113,17 @@ export const Process = () => {
               <button
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'scale(1.04)';
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(200,255,0,0.3)';
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(214,40,40,0.42)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
                   e.currentTarget.style.boxShadow = 'none';
                 }}
                 onClick={() => navigate('/get-started')}
-                className="inline-flex cursor-pointer items-center gap-2 self-start rounded-full border-none bg-accent py-2.5 pr-3 pl-5 text-xs font-bold text-bg transition-[transform,box-shadow] duration-200 ease-css"
+                className="inline-flex cursor-pointer items-center gap-2 self-start rounded-full border-none bg-accent py-2.5 pr-3 pl-5 text-xs font-bold text-on-accent transition-[transform,box-shadow] duration-200 ease-css"
               >
                 Let&apos;s do it!
-                <span className="flex h-6.5 w-6.5 items-center justify-center rounded-full bg-bg text-xs text-accent">
+                <span className="flex h-6.5 w-6.5 items-center justify-center rounded-full bg-bg text-xs text-accent-hi">
                   ↗
                 </span>
               </button>

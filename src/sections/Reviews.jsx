@@ -19,7 +19,7 @@ export const Reviews = () => {
   return (
     <section id="reviews" ref={ref} className="relative bg-surface-2 py-20 md:py-40">
       {/* Giant decorative quote mark */}
-      <div className="pointer-events-none absolute top-20 left-10 z-0 hidden font-display text-[320px] leading-none text-[rgba(200,255,0,0.035)] select-none md:block">
+      <div className="pointer-events-none absolute top-20 left-10 z-0 hidden font-display text-[320px] leading-none text-[rgba(255,75,75,0.055)] select-none md:block">
         &quot;
       </div>
       <div className="relative z-1 mx-auto max-w-[1200px] px-6 md:px-14">
@@ -108,7 +108,7 @@ export const Reviews = () => {
                   {r.type} &middot; {r.dur}
                 </div>
               </div>
-              <div className="pointer-events-none ml-auto font-display text-[80px] leading-none tracking-[.03em] text-[rgba(200,255,0,0.06)] select-none">
+              <div className="pointer-events-none ml-auto font-display text-[80px] leading-none tracking-[.03em] text-[rgba(255,75,75,0.09)] select-none">
                 &quot;
               </div>
             </div>

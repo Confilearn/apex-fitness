@@ -34,7 +34,9 @@ const FItem = ({ q, a, i, vis }) => {
             transition-[transform,background,border-color,color] duration-320 ease-css
             ${
               open
-                ? 'rotate-45 border-[rgba(200,255,0,.4)] bg-[rgba(200,255,0,.12)] text-[#5A7200]'
+                /* Deep red on the light accent tint — the accent itself is
+                   too close in value to read against a cream surface. */
+                ? 'rotate-45 border-[rgba(214,40,40,.35)] bg-[rgba(214,40,40,.12)] text-[#A31212]'
                 : 'rotate-0 border-[rgba(0,0,0,.1)] bg-[rgba(0,0,0,.05)] text-[rgba(0,0,0,0.4)]'
             }`}
         >

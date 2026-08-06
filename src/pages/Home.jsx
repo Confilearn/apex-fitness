@@ -11,7 +11,7 @@ import { FAQ } from '../components/FAQ';
 import { Footer } from '../components/Footer';
 
 export default function Home() {
-  useDocumentTitle('Jordan Lee Fitness — Built Different. Train Different.');
+  useDocumentTitle('Apex Performance — Train Hard. Perform Better.');
 
   return (
     <div className="bg-bg">

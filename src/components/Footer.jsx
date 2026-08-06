@@ -83,7 +83,7 @@ export const Footer = () => {
             <button
               {...accentHover}
               onClick={onCta}
-              className="rounded-btn border-none bg-accent px-10 py-4 text-[13px] font-bold tracking-[.18em] text-bg uppercase transition-[transform,box-shadow] duration-200 ease-css md:px-15 md:py-5"
+              className="rounded-btn border-none bg-accent px-10 py-4 text-[13px] font-bold tracking-[.18em] text-on-accent uppercase transition-[transform,box-shadow] duration-200 ease-css md:px-15 md:py-5"
             >
               Start Your Journey
             </button>
@@ -95,7 +95,7 @@ export const Footer = () => {
       <footer className="border-t border-[rgba(255,255,255,.06)] bg-bg">
         <div className="flex flex-col items-start justify-between gap-5 px-6 py-7 md:flex-row md:items-center md:px-14 md:py-9">
           <div className="font-display text-2xl tracking-[.18em] text-text">
-            JL<span className="text-accent">.</span>FITNESS
+            APEX<span className="text-accent-hi">.</span>PERFORMANCE
           </div>
           <div className="flex flex-wrap gap-4 md:gap-7">
             {footerSections.map((id) => (
@@ -123,7 +123,7 @@ export const Footer = () => {
           </div>
         </div>
         <div className="border-t border-[rgba(255,255,255,.04)] px-14 py-3.5 text-center text-[11px] tracking-[.06em] text-faint">
-          Built by <span className="text-accent">OSE.builds</span>
+          Built by <span className="text-accent-hi">OSE.builds</span>
         </div>
       </footer>
     </>

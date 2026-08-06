@@ -75,20 +75,20 @@ export const reviewData = [
   },
   {
     quote: "I came in thinking I just needed a workout plan. What I got was a complete reset — how I train, eat, recover. Down 28 lbs in 14 weeks and I've kept every pound off.",
-    name: 'Marcus R.',
+    name: 'Nathan R.',
     type: 'In-Person Training',
     dur: '14 weeks',
     photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&q=80',
   },
   {
     quote: 'Came back from a lower back injury not knowing what I could safely do. Now I\'m back to full training and stronger than I ever was before the injury. The rehab work was everything.',
-    name: 'Marcus L.',
+    name: 'Elliot L.',
     type: 'Online Training',
     dur: '5 months',
     photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&q=80',
   },
   {
-    quote: "Jordan tailors every session and takes recovery seriously. I'm in my forties and honestly in the best shape of my life. Age really is just a number when the programming is right.",
+    quote: "Marcus tailors every session and takes recovery seriously. I'm in my forties and honestly in the best shape of my life. Age really is just a number when the programming is right.",
     name: 'Isabella N.',
     type: 'In-Person Training',
     dur: '1 year',
@@ -128,8 +128,8 @@ export const faqs = [
 
 /* ── Location: in-person gyms ── */
 export const gyms = [
-  { name: 'Trainer Gym, SoMa', addr: '420 Bryant St, San Francisco, CA 94107', hrs: 'Mon–Fri  6am–9pm  ·  Sat–Sun  8am–6pm' },
-  { name: 'Iron House, Mission', addr: '2961 Mission St, San Francisco, CA 94110', hrs: 'Mon–Fri  5:30am–10pm  ·  Sat–Sun  7am–8pm' },
+  { name: 'Apex Performance, SoMa', addr: '420 Bryant St, San Francisco, CA 94107', hrs: 'Mon–Fri  6am–9pm  ·  Sat–Sun  8am–6pm' },
+  { name: 'Apex Performance, Mission', addr: '2961 Mission St, San Francisco, CA 94110', hrs: 'Mon–Fri  5:30am–10pm  ·  Sat–Sun  7am–8pm' },
 ];
 
 /* ── Nav + footer section links ── */

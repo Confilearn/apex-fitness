@@ -71,7 +71,7 @@ export const BookingHero = () => {
                   key={l}
                   className="rounded-xl border border-[rgba(255,255,255,0.1)] bg-[rgba(13,13,11,0.65)] px-4.5 py-2.5 backdrop-blur-md"
                 >
-                  <div className="font-display text-[28px] leading-none tracking-[.04em] text-accent">{n}</div>
+                  <div className="font-display text-[28px] leading-none tracking-[.04em] text-accent-hi">{n}</div>
                   <div className="mt-[3px] text-[9px] font-medium tracking-[0.14em] text-[rgba(232,224,208,0.45)] uppercase">
                     {l}
                   </div>
@@ -111,7 +111,7 @@ export const BookingHero = () => {
 
             {sent ? (
               <div className="py-13 text-center">
-                <div className="mb-3.5 font-display text-[60px] tracking-[.04em] text-accent">
+                <div className="mb-3.5 font-display text-[60px] tracking-[.04em] text-accent-hi">
                   You&apos;re In.
                 </div>
                 <p className="text-sm leading-[1.72] font-light text-muted">
@@ -123,7 +123,7 @@ export const BookingHero = () => {
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                   <FormField
                     label="First Name"
-                    placeholder="Jordan"
+                    placeholder="Alex"
                     value={form.name}
                     onChange={update('name')}
                     required
@@ -165,15 +165,15 @@ export const BookingHero = () => {
                   onMouseEnter={(e) => {
                     if (!loading) {
                       e.currentTarget.style.transform = 'scale(1.02)';
-                      e.currentTarget.style.boxShadow = '0 0 32px rgba(200,255,0,0.3)';
+                      e.currentTarget.style.boxShadow = '0 0 32px rgba(214,40,40,0.42)';
                     }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'scale(1)';
                     e.currentTarget.style.boxShadow = 'none';
                   }}
-                  className={`mt-1 w-full rounded-[10px] border-none p-4 text-[13px] font-bold tracking-[0.14em] text-bg uppercase transition-[transform,box-shadow,background] duration-200 ease-css
-                    ${loading ? 'cursor-wait bg-[rgba(200,255,0,0.65)]' : 'cursor-pointer bg-accent'}`}
+                  className={`mt-1 w-full rounded-[10px] border-none p-4 text-[13px] font-bold tracking-[0.14em] text-on-accent uppercase transition-[transform,box-shadow,background] duration-200 ease-css
+                    ${loading ? 'cursor-wait bg-[rgba(214,40,40,0.65)]' : 'cursor-pointer bg-accent'}`}
                 >
                   {loading ? 'Sending...' : 'Book My Free Call →'}
                 </button>

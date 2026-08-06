@@ -79,15 +79,15 @@ export const Hero = () => {
         <div>
           {/* Mixed weight: light intro / bold accent / light outro */}
           <h1 className="mb-[22px] font-body leading-none tracking-[-0.03em]">
-            <div style={fd(60)} className="text-[clamp(36px,5vw,72px)] leading-none whitespace-nowrap">
-              <span className="font-normal whitespace-nowrap text-[rgba(232,224,208,0.82)]">Meet the </span>
-              <span className="font-extrabold whitespace-nowrap text-accent">Stronger</span>
-            </div>
             <div
-              style={fd(160)}
+              style={fd(60)}
               className="text-[clamp(36px,5vw,72px)] leading-none font-normal whitespace-nowrap text-[rgba(232,224,208,0.82)]"
             >
-              version of you.
+              Train Hard.
+            </div>
+            <div style={fd(160)} className="text-[clamp(36px,5vw,72px)] leading-none whitespace-nowrap">
+              <span className="font-extrabold whitespace-nowrap text-accent">Perform</span>
+              <span className="font-normal whitespace-nowrap text-[rgba(232,224,208,0.82)]"> Better.</span>
             </div>
           </h1>
 
@@ -102,17 +102,17 @@ export const Hero = () => {
             <button
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'scale(1.03)';
-                e.currentTarget.style.boxShadow = '0 0 36px rgba(200,255,0,0.32)';
+                e.currentTarget.style.boxShadow = '0 0 36px rgba(214,40,40,0.45)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
                 e.currentTarget.style.boxShadow = 'none';
               }}
               onClick={() => navigate('/get-started')}
-              className="inline-flex cursor-pointer items-center gap-3.5 rounded-full border-none bg-accent py-3 pr-3.5 pl-7 text-sm font-semibold text-bg transition-[transform,box-shadow] duration-220 ease-css"
+              className="inline-flex cursor-pointer items-center gap-3.5 rounded-full border-none bg-accent py-3 pr-3.5 pl-7 text-sm font-semibold text-on-accent transition-[transform,box-shadow] duration-220 ease-css"
             >
               Get Started
-              <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-bg text-[15px] text-accent">
+              <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-bg text-[15px] text-accent-hi">
                 ↗
               </span>
             </button>

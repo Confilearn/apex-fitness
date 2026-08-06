@@ -21,7 +21,7 @@ const BAS = ({ bSrc, aSrc }) => (
     {/* After */}
     <div className="relative h-[260px] overflow-hidden rounded-xl md:h-[600px]">
       <img src={aSrc} alt="After" className="h-full w-full object-cover brightness-[.72] contrast-[1.12]" />
-      <div className="absolute top-3.5 right-3.5 bg-[rgba(0,0,0,.5)] px-[9px] py-1 text-[10px] font-semibold tracking-[0.2em] text-accent uppercase">
+      <div className="absolute top-3.5 right-3.5 bg-[rgba(0,0,0,.5)] px-[9px] py-1 text-[10px] font-semibold tracking-[0.2em] text-accent-hi uppercase">
         After
       </div>
     </div>
