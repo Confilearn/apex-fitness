@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Started — Jordan Lee Fitness</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300..900;1,9..40,300..700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #0D0D0B;
+      color: #E8E0D0;
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    button, a { font-family: inherit; cursor: pointer; }
+    img { display: block; max-width: 100%; }
+
+    :root {
+      --bg:        #0D0D0B;
+      --accent:    #C8FF00;
+      --ease:      cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body::after {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.035; pointer-events: none; z-index: 9999;
+    }
+
+    .nav-link {
+      position: relative; background: none; border: none;
+      padding: 4px 0; font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      transition: color 0.2s ease;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1px; background: #C8FF00;
+      transition: width 0.25s ease;
+    }
+    .nav-link:hover { color: rgba(255,255,255,1); }
+    .nav-link:hover::after { width: 100%; }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: #0D0D0B; }
+    ::-webkit-scrollbar-thumb { background: #2A2A28; border-radius: 2px; }
+
+    /* ── Form inputs ── */
+    .gs-input, .gs-textarea, .gs-select {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: #E8E0D0;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .gs-input::placeholder, .gs-textarea::placeholder { color: rgba(232,224,208,0.25); }
+    .gs-input:focus, .gs-textarea:focus, .gs-select:focus { border-color: rgba(200,255,0,0.45); }
+    .gs-textarea { resize: vertical; min-height: 96px; }
+    .gs-select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888880' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+    .gs-select option { background: #1A1A18; color: #E8E0D0; }
+  </style>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useLayoutEffect, useRef } = React;
+
+/* ════════════════════════════════════════════════════════════
+   SHARED UTILITIES
+   ════════════════════════════════════════════════════════════ */
+const useInView = (threshold = 0.12, rootMargin = '0px 0px -12% 0px') => {
+  const ref = useRef(null);
+  const [vis, setVis] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setVis(true); obs.disconnect(); }
+    }, { threshold, rootMargin });
+    obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [threshold, rootMargin]);
+  return [ref, vis];
+};
+
+const reveal = (vis, delay = 0, axis = 'y') => ({
+  opacity: vis ? 1 : 0,
+  transform: vis ? 'none'
+    : axis === 'x'     ? 'translateX(-48px)'
+    : axis === 'right' ? 'translateX(48px)'
+    :                    'translateY(40px)',
+  transition: `opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}ms, transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}ms`,
+  willChange: 'opacity, transform'
+});
+
+const useMobile = () => {
+  const [mobile, setMobile] = React.useState(() => window.innerWidth < 768);
+  React.useEffect(() => {
+    const fn = () => setMobile(window.innerWidth < 768);
+    window.addEventListener('resize', fn, { passive: true });
+    return () => window.removeEventListener('resize', fn);
+  }, []);
+  return mobile;
+};
+
+const accentHover = {
+  onMouseEnter: (e) => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 0 36px rgba(200,255,0,0.28)'; },
+  onMouseLeave: (e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }
+};
+
+const Label = ({ children, vis, style = {} }) =>
+  <div style={{ opacity: vis ? 1 : 0, transition: 'opacity 0.4s ease', fontFamily: 'DM Sans', fontSize: '11px', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888880', marginBottom: '18px', ...style }}>{children}</div>;
+
+/* ════════════════════════════════════════════════════════════
+   FORM COMPONENTS
+   ════════════════════════════════════════════════════════════ */
+const FormField = ({ label, type = 'text', placeholder, value, onChange, required, textarea }) => (
+  <div>
+    <label style={{ display: 'block', fontSize: '10px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.38)', marginBottom: '7px' }}>{label}</label>
+    {textarea
+      ? <textarea className="gs-textarea" placeholder={placeholder} value={value} onChange={onChange} />
+      : <input className="gs-input" type={type} placeholder={placeholder} value={value} onChange={onChange} required={required} />
+    }
+  </div>
+);
+
+const FormSelect = ({ label, value, onChange, required, options }) => (
+  <div>
+    <label style={{ display: 'block', fontSize: '10px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.38)', marginBottom: '7px' }}>{label}</label>
+    <select className="gs-select" value={value} onChange={onChange} required={required}>
+      {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+    </select>
+  </div>
+);
+
+/* ════════════════════════════════════════════════════════════
+   NAV — links back to homepage
+   ════════════════════════════════════════════════════════════ */
+const Nav = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const isMobile = useMobile();
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+  useEffect(() => { if (!isMobile) setMenuOpen(false); }, [isMobile]);
+  const go = (id) => { setMenuOpen(false); window.location.href = `Jordan Lee Fitness.html#${id}`; };
+  return (
+    <>
+      <nav style={{
+        position: 'fixed', top: '16px', left: '50%', transform: 'translateX(-50%)',
+        zIndex: 1000, display: 'flex', alignItems: 'center',
+        width: isMobile ? 'calc(100vw - 40px)' : 'calc(100vw - 80px)',
+        maxWidth: scrolled ? '1000px' : '1200px',
+        padding: scrolled ? '9px 20px' : (isMobile ? '11px 20px' : '13px 36px'),
+        borderRadius: scrolled ? '999px' : '20px',
+        whiteSpace: 'nowrap',
+        background: scrolled ? 'rgba(13,13,11,0.88)' : 'rgba(13,13,11,0.52)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        border: scrolled ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(255,255,255,0.08)',
+        boxShadow: scrolled ? '0 8px 32px rgba(0,0,0,0.45)' : '0 2px 24px rgba(0,0,0,0.15)',
+        transition: 'max-width 0.5s cubic-bezier(0.16,1,0.3,1), padding 0.5s cubic-bezier(0.16,1,0.3,1), border-radius 0.5s cubic-bezier(0.16,1,0.3,1), background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', flexShrink: 0 }}
+          onClick={() => window.location.href = 'Jordan Lee Fitness.html'}>
+          <svg width="28" height="28" viewBox="0 0 256 256" fill="#C8FF00"><path d="M248,120h-8V88a16,16,0,0,0-16-16H208V64a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v56H104V64A16,16,0,0,0,88,48H64A16,16,0,0,0,48,64v8H32A16,16,0,0,0,16,88v32H8a8,8,0,0,0,0,16h8v32a16,16,0,0,0,16,16H48v8a16,16,0,0,0,16,16H88a16,16,0,0,0,16-16V136h48v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16v-8h16a16,16,0,0,0,16-16V136h8a8,8,0,0,0,0-16ZM32,168V88H48v80Zm56,24H64V64H88V192Zm104,0H168V64h24V192Zm32-24H208V88h16Z"/></svg>
+          <span style={{ fontFamily: 'DM Sans', fontWeight: 600, fontSize: '15px', color: '#E8E0D0' }}>Jordan Lee</span>
+        </div>
+        {!isMobile && <>
+          <div style={{ display: 'flex', gap: '32px', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+            {['About', 'Services', 'Process', 'Results', 'Pricing'].map(l => (
+              <button key={l} className="nav-link" onClick={() => go(l.toLowerCase())}>{l}</button>
+            ))}
+          </div>
+          <button
+            onMouseEnter={e => { e.currentTarget.style.background = '#C8FF00'; e.currentTarget.style.color = '#0D0D0B'; e.currentTarget.style.boxShadow = '0 0 20px rgba(200,255,0,0.25)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#C8FF00'; e.currentTarget.style.boxShadow = 'none'; }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            style={{ flexShrink: 0, padding: '8px 20px', background: 'transparent', color: '#C8FF00', border: '1.5px solid #C8FF00', borderRadius: '999px', fontSize: '14px', fontWeight: 600, transition: 'all .2s ease' }}>
+            Get Started
+          </button>
+        </>}
+        {isMobile && (
+          <button onClick={() => setMenuOpen(o => !o)} style={{ marginLeft: 'auto', background: 'none', border: 'none', padding: '4px', display: 'flex', flexDirection: 'column', gap: '5px', cursor: 'pointer' }}>
+            {menuOpen
+              ? <svg width="22" height="22" viewBox="0 0 256 256" fill="#E8E0D0"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+              : <>
+                  <span style={{ display: 'block', width: '22px', height: '1.5px', background: '#E8E0D0', borderRadius: '2px' }} />
+                  <span style={{ display: 'block', width: '22px', height: '1.5px', background: '#E8E0D0', borderRadius: '2px' }} />
+                  <span style={{ display: 'block', width: '14px', height: '1.5px', background: '#E8E0D0', borderRadius: '2px' }} />
+                </>
+            }
+          </button>
+        )}
+      </nav>
+      {isMobile && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 999,
+          background: 'rgba(13,13,11,0.97)', backdropFilter: 'blur(16px)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px',
+          opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? 'all' : 'none',
+          transition: 'opacity 0.25s ease',
+        }}>
+          {['About', 'Services', 'Process', 'Results', 'Pricing'].map(l => (
+            <button key={l} onClick={() => go(l.toLowerCase())} style={{ background: 'none', border: 'none', fontFamily: 'DM Sans', fontSize: '32px', fontWeight: 600, color: '#E8E0D0', padding: '12px 0', letterSpacing: '-0.02em', cursor: 'pointer', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#C8FF00'}
+              onMouseLeave={e => e.currentTarget.style.color = '#E8E0D0'}>
+              {l}
+            </button>
+          ))}
+          <button onClick={() => { setMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            style={{ marginTop: '24px', padding: '14px 40px', background: '#C8FF00', color: '#0D0D0B', border: 'none', borderRadius: '999px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
+            Get Started
+          </button>
+        </div>
+      )}
+    </>
+  );
+};
+
+/* ════════════════════════════════════════════════════════════
+   BOOKING HERO
+   Left: cinematic photo panel. Right: contact form.
+   ════════════════════════════════════════════════════════════ */
+const BookingHero = () => {
+  const [form, setForm] = useState({ name: '', email: '', phone: '', goal: '', message: '' });
+  const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [vis, setVis] = useState(false);
+  const isMobile = useMobile();
+
+  useEffect(() => { const t = setTimeout(() => setVis(true), 180); return () => clearTimeout(t); }, []);
+
+  const update = (field) => (e) => setForm(prev => ({ ...prev, [field]: e.target.value }));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => { setLoading(false); setSent(true); }, 1400);
+  };
+
+  const fd = (d) => ({
+    opacity: vis ? 1 : 0,
+    transform: vis ? 'none' : 'translateY(28px)',
+    transition: `opacity .75s ease ${d}ms, transform .75s cubic-bezier(0.25,0.46,0.45,0.94) ${d}ms`
+  });
+
+  return (
+    <section style={{ background: '#0D0D0B', minHeight: '100vh', paddingTop: '80px', display: 'flex', alignItems: 'center' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: isMobile ? '32px 24px' : '40px 56px', width: '100%' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '44% 56%', gap: '20px', alignItems: 'stretch', minHeight: isMobile ? 'auto' : '660px' }}>
+
+          {/* ── Left — photo panel ── */}
+          <div style={{ ...fd(0), position: 'relative', borderRadius: '20px', overflow: 'hidden', minHeight: isMobile ? '280px' : 'auto' }}>
+            <img src="assets/woman-doing-workout-gym-with-trainer.jpg" alt="Training session"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', filter: 'brightness(0.5) contrast(1.12)', display: 'block' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,13,11,0.97) 0%, rgba(13,13,11,0.12) 55%, transparent 100%)' }} />
+
+            {/* Stat chips */}
+            <div style={{ position: 'absolute', top: '24px', left: '24px', display: 'flex', gap: '10px' }}>
+              {[{ n: '500+', l: 'Clients' }, { n: '99%', l: 'Satisfaction' }].map(({ n, l }) => (
+                <div key={l} style={{ padding: '10px 18px', background: 'rgba(13,13,11,0.65)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}>
+                  <div style={{ fontFamily: 'Bebas Neue', fontSize: '28px', letterSpacing: '.04em', color: '#C8FF00', lineHeight: 1 }}>{n}</div>
+                  <div style={{ fontSize: '9px', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.45)', marginTop: '3px' }}>{l}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bottom text */}
+            <div style={{ position: 'absolute', bottom: '36px', left: '36px', right: '36px' }}>
+              <div style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(34px, 3.8vw, 52px)', lineHeight: 0.95, color: '#E8E0D0', marginBottom: '14px' }}>
+                Your Transformation<br />Starts Here.
+              </div>
+              <p style={{ fontSize: '13px', fontWeight: 300, color: 'rgba(232,224,208,0.5)', lineHeight: 1.65 }}>
+                A free 20-minute call to map out your path forward. No pressure, no filler.
+              </p>
+            </div>
+          </div>
+
+          {/* ── Right — form card ── */}
+          <div style={{ ...fd(140), padding: isMobile ? '32px 24px' : '48px 52px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+
+            <div style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888880', marginBottom: '10px' }}>Free Consultation</div>
+            <h1 style={{ fontFamily: 'DM Sans', fontWeight: 800, fontSize: 'clamp(30px, 3vw, 44px)', lineHeight: 1.0, letterSpacing: '-0.03em', color: '#E8E0D0', marginBottom: '10px' }}>
+              Book Your<br /><span style={{ color: '#C8FF00' }}>Discovery Call</span>
+            </h1>
+            <p style={{ fontSize: '13px', fontWeight: 300, color: '#888880', lineHeight: 1.72, marginBottom: '32px' }}>
+              20 minutes. Zero pressure. We'll figure out if we're the right fit.
+            </p>
+
+            {sent ? (
+              <div style={{ textAlign: 'center', padding: '52px 0' }}>
+                <div style={{ fontFamily: 'Bebas Neue', fontSize: '60px', letterSpacing: '.04em', color: '#C8FF00', marginBottom: '14px' }}>You're In.</div>
+                <p style={{ fontSize: '14px', fontWeight: 300, color: '#888880', lineHeight: 1.72 }}>
+                  We'll be in touch within 24 hours to confirm your call time.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '12px' }}>
+                  <FormField label="First Name" placeholder="Jordan" value={form.name} onChange={update('name')} required />
+                  <FormField label="Email" type="email" placeholder="you@email.com" value={form.email} onChange={update('email')} required />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '12px' }}>
+                  <FormField label="Phone (optional)" type="tel" placeholder="+1 (555) 000-0000" value={form.phone} onChange={update('phone')} />
+                  <FormSelect label="Training Goal" value={form.goal} onChange={update('goal')} required options={[
+                    { value: '', label: 'Select a goal...' },
+                    { value: 'strength', label: 'Build Real Strength' },
+                    { value: 'conditioning', label: 'Improve Conditioning' },
+                    { value: 'weight', label: 'Lose Weight / Cut' },
+                    { value: 'injury', label: 'Injury Recovery' },
+                    { value: 'performance', label: 'Athletic Performance' },
+                    { value: 'general', label: 'General Fitness' },
+                  ]} />
+                </div>
+                <FormField label="Anything else we should know?" placeholder="Current fitness level, injuries, schedule preferences..." value={form.message} onChange={update('message')} textarea />
+                <button type="submit"
+                  onMouseEnter={e => { if (!loading) { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 0 32px rgba(200,255,0,0.3)'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}
+                  style={{ width: '100%', padding: '16px', background: loading ? 'rgba(200,255,0,0.65)' : '#C8FF00', color: '#0D0D0B', fontSize: '13px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', border: 'none', borderRadius: '10px', cursor: loading ? 'wait' : 'pointer', transition: 'transform .2s ease, box-shadow .2s ease, background .2s', marginTop: '4px' }}>
+                  {loading ? 'Sending...' : 'Book My Free Call →'}
+                </button>
+                <p style={{ fontSize: '11px', color: '#3E3E3A', textAlign: 'center', lineHeight: 1.6 }}>
+                  No spam. Your details are private and never shared.
+                </p>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ════════════════════════════════════════════════════════════
+   LOCATION
+   Light cream. Animated border radius. Info + photos + map.
+   ════════════════════════════════════════════════════════════ */
+const Location = () => {
+  const [ref, vis] = useInView(0.12, '0px 0px -8% 0px');
+  const [br, setBr] = useState(28);
+  const isMobile = useMobile();
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el = ref.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      const start = window.innerHeight * 0.65;
+      const t = 1 - Math.max(0, Math.min(1, top / start));
+      setBr(Math.round(28 * (1 - t)));
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <section ref={ref} style={{ background: '#F2F1EB', padding: isMobile ? '80px 0' : '120px 0', borderRadius: `${br}px`, overflow: 'hidden', transition: 'border-radius 0.05s linear' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: isMobile ? '0 24px' : '0 56px' }}>
+
+        {/* Heading row */}
+        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'flex-end', justifyContent: 'space-between', gap: isMobile ? '12px' : '0', marginBottom: '40px' }}>
+          <div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', marginBottom: '20px' }}>
+              <svg width="13" height="13" viewBox="0 0 256 256" fill="rgba(0,0,0,0.4)"><path d="M128,16a96,96,0,1,0,96,96A96.11,96.11,0,0,0,128,16Zm0,40a40,40,0,1,1-40,40A40,40,0,0,1,128,56Zm0,144a88.11,88.11,0,0,1-67.37-31.47C79.28,150.39,102.21,136,128,136s48.72,14.39,67.37,36.53A88.11,88.11,0,0,1,128,200Z"/></svg>
+              <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)' }}>Location</span>
+            </div>
+            <h2 style={{ ...reveal(vis, 80), fontFamily: 'DM Sans', fontWeight: 800, fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 1.0, letterSpacing: '-0.035em', color: '#1C1B18' }}>
+              Come Train<br />With Us
+            </h2>
+          </div>
+          {!isMobile && <p style={{ ...reveal(vis, 160), fontSize: '14px', fontWeight: 300, color: '#6E6B66', lineHeight: 1.72, maxWidth: '260px', paddingBottom: '4px' }}>
+            In-person sessions at two locations across San Francisco.
+          </p>}
+        </div>
+
+        {/* Grid: left col (info + photos) / right col (map) */}
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '12px', alignItems: 'stretch' }}>
+
+          {/* Left */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+            {/* Info card */}
+            <div style={{ ...reveal(vis, 100, 'x'), background: '#FFFFFF', border: '1px solid rgba(0,0,0,0.07)', borderRadius: '16px', padding: '32px' }}>
+              {[
+                { name: 'Trainer Gym, SoMa', addr: '420 Bryant St, San Francisco, CA 94107', hrs: 'Mon–Fri  6am–9pm  ·  Sat–Sun  8am–6pm' },
+                { name: 'Iron House, Mission', addr: '2961 Mission St, San Francisco, CA 94110', hrs: 'Mon–Fri  5:30am–10pm  ·  Sat–Sun  7am–8pm' }
+              ].map((g, i) => (
+                <div key={i} style={{ paddingBottom: i === 0 ? '20px' : 0, marginBottom: i === 0 ? '20px' : 0, borderBottom: i === 0 ? '1px solid rgba(0,0,0,0.07)' : 'none' }}>
+                  <div style={{ fontFamily: 'DM Sans', fontWeight: 700, fontSize: '15px', color: '#1C1B18', marginBottom: '5px' }}>{g.name}</div>
+                  <div style={{ fontSize: '13px', fontWeight: 300, color: '#6E6B66', lineHeight: 1.55, marginBottom: '5px' }}>{g.addr}</div>
+                  <div style={{ fontSize: '11px', fontWeight: 400, color: 'rgba(0,0,0,0.32)', letterSpacing: '0.02em' }}>{g.hrs}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Two gym photos */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', flex: 1 }}>
+              <div style={{ ...reveal(vis, 180, 'x'), borderRadius: '16px', overflow: 'hidden', minHeight: '200px' }}>
+                <img src="assets/images/dumbbell-rack.jpg" alt="Gym"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'contrast(1.05) saturate(0.88)', display: 'block' }} />
+              </div>
+              <div style={{ ...reveal(vis, 240, 'x'), borderRadius: '16px', overflow: 'hidden', minHeight: '200px' }}>
+                <img src="assets/images/trainer-session.jpg" alt="Training"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'contrast(1.05) saturate(0.88)', display: 'block' }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Right — map */}
+          <div style={{ ...reveal(vis, 160, 'right'), borderRadius: '16px', overflow: 'hidden', minHeight: '460px' }}>
+            <iframe
+              src="https://maps.google.com/maps?q=SoMa,San+Francisco,CA&t=&z=14&ie=UTF8&iwloc=&output=embed"
+              style={{ border: 0, width: '100%', height: '100%', display: 'block', minHeight: '460px' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Gym Location"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ════════════════════════════════════════════════════════════
+   FAQ — identical to homepage
+   ════════════════════════════════════════════════════════════ */
+const faqs = [
+  { q: 'How does getting started work?', a: "Book a free 20-minute discovery call. We cover your goals, current fitness level, schedule, and any limitations. If we're a fit, your plan is ready within 48 hours." },
+  { q: 'Do I need a gym membership?', a: "For in-person training, yes — we train at two gyms in San Francisco. For online coaching, I'll build your program around whatever equipment you have access to, including home setups." },
+  { q: "I'm just starting out, is that okay?", a: "Beginners make some of the fastest progress. There's no base level required. We start where you are and build from there — no assumptions, no ego." },
+  { q: "What's the difference between online and in-person?", a: "In-person means we train together 4 days a week with real-time coaching. Online is fully remote with weekly check-ins, form reviews, and daily messaging access. Both get the same level of programming." },
+  { q: 'Do you offer flexible scheduling?', a: "For in-person sessions, we lock in a recurring time slot that works for your calendar. Online clients train on their own schedule — the program is designed to work around your life." },
+  { q: 'Can I pause or cancel at any time?', a: "Yes. Month-to-month, no contracts. Give 7 days notice to pause or cancel. I'd rather you come back when you're ready than feel locked in." }
+];
+
+const FItem = ({ q, a, i, vis }) => {
+  const [open, setOpen] = useState(false);
+  const bRef = useRef(null);
+  const [h, setH] = useState(0);
+  useLayoutEffect(() => { if (bRef.current) setH(bRef.current.scrollHeight); }, []);
+  return (
+    <div style={{ borderTop: '1px solid rgba(0,0,0,0.1)', opacity: vis ? 1 : 0, transform: vis ? 'none' : 'translateY(16px)', transition: `opacity .45s ease ${i * 65}ms, transform .45s ease ${i * 65}ms` }}>
+      <button onClick={() => setOpen(o => !o)} style={{ width: '100%', background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '22px 0', gap: '24px', textAlign: 'left' }}>
+        <span style={{ fontSize: '16px', fontWeight: 500, color: '#1C1B18', lineHeight: 1.4 }}>{q}</span>
+        <span style={{ flexShrink: 0, width: '26px', height: '26px', background: open ? 'rgba(200,255,0,.12)' : 'rgba(0,0,0,.05)', border: `1px solid ${open ? 'rgba(200,255,0,.4)' : 'rgba(0,0,0,.1)'}`, borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: open ? '#5A7200' : 'rgba(0,0,0,0.4)', fontSize: '18px', fontWeight: 200, transform: open ? 'rotate(45deg)' : 'rotate(0)', transition: 'transform .32s ease, background .2s, border-color .2s, color .2s' }}>+</span>
+      </button>
+      <div style={{ maxHeight: open ? `${h}px` : '0', overflow: 'hidden', transition: 'max-height .36s ease' }}>
+        <div ref={bRef} style={{ paddingBottom: '22px' }}>
+          <p style={{ fontSize: '15px', fontWeight: 300, color: '#6E6B66', lineHeight: 1.78, maxWidth: '640px' }}>{a}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const FAQ = () => {
+  const [ref, vis] = useInView(0.1);
+  const isMobile = useMobile();
+  return (
+    <section ref={ref} style={{ background: '#F2F1EB', padding: isMobile ? '80px 0' : '160px 0' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: isMobile ? '0 24px' : '0 56px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '38% 1fr', gap: isMobile ? '32px' : '100px', alignItems: 'start' }}>
+          <div style={{ position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', bottom: '-40px', left: '-20px', zIndex: 0, fontFamily: 'Bebas Neue', fontSize: '220px', lineHeight: 1, color: 'rgba(0,0,0,0.06)', userSelect: 'none', pointerEvents: 'none' }}>?</div>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <Label vis={vis} style={{ color: 'rgba(0,0,0,0.4)' }}>Common Questions</Label>
+              <h2 style={{ ...reveal(vis, 80), fontFamily: 'DM Sans', fontWeight: 800, fontSize: 'clamp(40px, 4.5vw, 60px)', lineHeight: 0.98, letterSpacing: '-0.035em', color: '#1C1B18', marginBottom: '20px' }}>
+                Everything<br />You Need<br />To Know
+              </h2>
+              <p style={{ ...reveal(vis, 160), fontSize: '14px', fontWeight: 300, color: '#6E6B66', lineHeight: 1.7 }}>
+                Still have questions? Book a free call and ask directly.
+              </p>
+            </div>
+          </div>
+          <div style={{ borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
+            {faqs.map((f, i) => <FItem key={i} q={f.q} a={f.a} i={i} vis={vis} />)}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ════════════════════════════════════════════════════════════
+   FOOTER + CTA — identical to homepage
+   ════════════════════════════════════════════════════════════ */
+const SBtn = ({ children }) => {
+  const [hov, setHov] = useState(false);
+  return (
+    <button onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{ width: '36px', height: '36px', background: hov ? 'rgba(255,255,255,.08)' : 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s' }}>
+      {children}
+    </button>
+  );
+};
+
+const Footer = () => {
+  const [ref, vis] = useInView(0.1);
+  const ctaBgRef = useRef(null);
+  const isMobile = useMobile();
+  const go = (id) => { window.location.href = `Jordan Lee Fitness.html#${id}`; };
+
+  useEffect(() => {
+    let ticking = false;
+    const fn = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (ctaBgRef.current && ref.current) {
+            const rect = ref.current.getBoundingClientRect();
+            const viewH = window.innerHeight;
+            const center = (rect.top + rect.height / 2) / viewH - 0.5;
+            const offset = center * rect.height * 0.12;
+            ctaBgRef.current.style.transform = `translateY(${offset}px)`;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    fn();
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  return (
+    <>
+      {/* ─── Final CTA ─── */}
+      <section ref={ref} style={{ position: 'relative', overflow: 'hidden', padding: isMobile ? '100px 0' : '160px 0' }}>
+        <div style={{ position: 'absolute', inset: 0 }}>
+          <img ref={ctaBgRef} src="assets/images/dumbbells-mat.jpg" alt=""
+            style={{ position: 'absolute', top: '-12%', left: 0, width: '100%', height: '124%', objectFit: 'cover', filter: 'brightness(.28) contrast(1.15)', display: 'block', willChange: 'transform' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(13,13,11,.7)' }} />
+        </div>
+        <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: '960px', margin: '0 auto', padding: isMobile ? '0 24px' : '0 56px' }}>
+          <div style={{ opacity: vis ? 1 : 0, transform: vis ? 'none' : 'translateY(28px)', transition: 'opacity .65s ease, transform .65s ease' }}>
+            <div style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888880', marginBottom: '28px' }}>The First Step Is The Hardest</div>
+            <h2 style={{ fontFamily: 'Bebas Neue', fontSize: isMobile ? 'clamp(52px, 13vw, 80px)' : 'clamp(64px, 9.5vw, 128px)', lineHeight: '0.88', letterSpacing: '.025em', color: '#E8E0D0', marginBottom: '40px' }}>
+              Ready To Achieve<br /><span style={{ color: '#C8FF00' }}>Your Goals?</span>
+            </h2>
+            <button {...accentHover} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              style={{ padding: isMobile ? '16px 40px' : '20px 60px', background: '#C8FF00', color: '#0D0D0B', fontSize: '13px', fontWeight: 700, letterSpacing: '.18em', textTransform: 'uppercase', border: 'none', borderRadius: '12px', transition: 'transform .2s ease, box-shadow .2s ease' }}>
+              Start Your Journey
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Footer ─── */}
+      <footer style={{ background: '#0D0D0B', borderTop: '1px solid rgba(255,255,255,.06)' }}>
+        <div style={{ padding: isMobile ? '28px 24px' : '36px 56px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'space-between', gap: '20px' }}>
+          <div style={{ fontFamily: 'Bebas Neue', fontSize: '24px', letterSpacing: '.18em', color: '#E8E0D0' }}>JL<span style={{ color: '#C8FF00' }}>.</span>FITNESS</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: isMobile ? '16px' : '28px' }}>
+            {['about', 'services', 'process', 'results', 'pricing', 'faq'].map((id) =>
+              <button key={id} onClick={() => go(id)}
+                onMouseEnter={e => e.currentTarget.style.color = '#888880'}
+                onMouseLeave={e => e.currentTarget.style.color = '#3E3E3A'}
+                style={{ background: 'none', border: 'none', fontSize: '11px', fontWeight: 500, letterSpacing: '.1em', textTransform: 'uppercase', color: '#3E3E3A', transition: 'color .2s' }}>
+                {id.charAt(0).toUpperCase() + id.slice(1)}
+              </button>
+            )}
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <SBtn><svg width="14" height="14" viewBox="0 0 256 256" fill="#888880"><path d="M224,72a48.05,48.05,0,0,0-48-48H80A48.05,48.05,0,0,0,32,72V184a48.05,48.05,0,0,0,48,48H176a48.05,48.05,0,0,0,48-48ZM128,168a40,40,0,1,1,40-40A40,40,0,0,1,128,168Zm52-72a12,12,0,1,1,12-12A12,12,0,0,1,180,96Z" /></svg></SBtn>
+            <SBtn><svg width="14" height="14" viewBox="0 0 256 256" fill="#888880"><path d="M214.75,211.71l-62.6-98.36,61.77-67.95a8,8,0,0,0-11.84-10.76l-58.17,63.96L99.25,44.29A8,8,0,0,0,92.5,40H48a8,8,0,0,0-6.75,12.29l62.6,98.36L41.08,218.61a8,8,0,1,0,11.84,10.76l58.17-63.96,45.66,71.75A8,8,0,0,0,163.5,240H208a8,8,0,0,0,6.75-12.29Z" /></svg></SBtn>
+            <SBtn><svg width="14" height="14" viewBox="0 0 256 256" fill="#888880"><path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24ZM96,176a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0ZM88,96a12,12,0,1,1,12-12A12,12,0,0,1,88,96Zm96,80a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140Z" /></svg></SBtn>
+          </div>
+        </div>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,.04)', padding: '14px 56px', textAlign: 'center', fontSize: '11px', color: '#3E3E3A', letterSpacing: '.06em' }}>
+          Built by <span style={{ color: '#C8FF00' }}>OSE.builds</span>
+        </div>
+      </footer>
+    </>
+  );
+};
+
+/* ════════════════════════════════════════════════════════════
+   APP
+   ════════════════════════════════════════════════════════════ */
+const App = () => (
+  <div style={{ background: '#0D0D0B' }}>
+    <Nav />
+    <BookingHero />
+    <Location />
+    <FAQ />
+    <Footer />
+  </div>
+);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
