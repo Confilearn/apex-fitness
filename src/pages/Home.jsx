@@ -1,4 +1,5 @@
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { Seo, LocalBusinessSchema, FaqSchema } from '../components/Seo';
+import { business, faqs, gyms, plans, reviewData } from '../data/content';
 import { Intro } from '../sections/Intro';
 import { Hero } from '../sections/Hero';
 import { About } from '../sections/About';
@@ -11,19 +12,23 @@ import { FAQ } from '../components/FAQ';
 import { Footer } from '../components/Footer';
 
 export default function Home() {
-  useDocumentTitle('Apex Performance — Train Hard. Perform Better.');
-
   return (
     <div className="bg-bg">
+      <Seo title={`${business.name} — ${business.tagline}`} description={business.description} />
+      <LocalBusinessSchema gyms={gyms} plans={plans} reviews={reviewData} />
+      <FaqSchema faqs={faqs} />
+
       <Intro />
-      <Hero />
-      <About />
-      <Services />
-      <Process />
-      <ClientResults />
-      <Reviews />
-      <Pricing />
-      <FAQ id="faq" animateRadius />
+      <main id="main">
+        <Hero />
+        <About />
+        <Services />
+        <Process />
+        <ClientResults />
+        <Reviews />
+        <Pricing />
+        <FAQ id="faq" animateRadius />
+      </main>
       <Footer />
     </div>
   );

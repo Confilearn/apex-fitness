@@ -3,3 +3,10 @@ dist
 *.local
 .DS_Store
 .vite
+.vercel
+
+# Untouched camera/stock masters (~175 MB). `npm run optimize:media` turns
+# these into the ~3.7 MB of derivatives in src/assets/media, which ARE
+# committed — so a clone builds without them. Keep the masters in shared
+# storage, not in git history.
+media-src/

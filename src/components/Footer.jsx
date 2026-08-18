@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useInView } from '../hooks/useInView';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import { accentHover } from '../lib/motion';
-import { footerSections } from '../data/content';
-import { SBtn } from './SBtn';
-import { InstagramIcon, XIcon, LinkedInIcon } from './icons';
+import { onScrollFrame } from '../lib/scroll';
+import { business, footerSections, socials } from '../data/content';
+import { Img } from './Img';
+import { SOCIAL_ICONS } from './icons';
 
 /* ════════════════════════════════════════════════════════════
    10 + 11. FINAL CTA + FOOTER
@@ -15,6 +17,7 @@ export const Footer = () => {
   const ctaBgRef = useRef(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const reduced = useReducedMotion();
   const onHome = pathname === '/';
 
   const go = (id) => {
@@ -22,8 +25,8 @@ export const Footer = () => {
       navigate(`/#${id}`);
       return;
     }
-    const el = document.getElementById(id);
-    if (el) window.scrollTo({ top: el.offsetTop - 72, behavior: 'smooth' });
+    // scroll-margin-top on [id] handles the fixed-nav offset in CSS.
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const onCta = () => {
@@ -33,38 +36,27 @@ export const Footer = () => {
     else navigate('/get-started');
   };
 
-  // Slow counter-drift on the CTA photo — rAF-throttled scroll parallax.
+  // Slow counter-drift on the CTA photo.
   useEffect(() => {
-    let ticking = false;
-    const fn = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          if (ctaBgRef.current && ref.current) {
-            const rect = ref.current.getBoundingClientRect();
-            const viewH = window.innerHeight;
-            const center = (rect.top + rect.height / 2) / viewH - 0.5;
-            const offset = center * rect.height * 0.12;
-            ctaBgRef.current.style.transform = `translateY(${offset}px)`;
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    fn();
-    window.addEventListener('scroll', fn, { passive: true });
-    return () => window.removeEventListener('scroll', fn);
-  }, [ref]);
+    if (reduced) return;
+    return onScrollFrame(() => {
+      if (!ctaBgRef.current || !ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const center = (rect.top + rect.height / 2) / window.innerHeight - 0.5;
+      ctaBgRef.current.style.transform = `translateY(${center * rect.height * 0.12}px)`;
+    });
+  }, [ref, reduced]);
 
   return (
     <>
       {/* ─── Final CTA ─── */}
       <section ref={ref} className="relative overflow-hidden py-25 md:py-40">
         <div className="absolute inset-0">
-          <img
+          <Img
             ref={ctaBgRef}
-            src="/assets/images/dumbbells-mat.jpg"
+            name="dumbbells-mat"
             alt=""
+            sizes="100vw"
             className="absolute top-[-12%] left-0 block h-[124%] w-full object-cover brightness-[.28] contrast-[1.15] will-change-transform"
           />
           <div className="absolute inset-0 bg-[rgba(13,13,11,.7)]" />
@@ -72,7 +64,7 @@ export const Footer = () => {
         <div className="relative z-2 mx-auto max-w-[960px] px-6 text-center md:px-14">
           <div
             className="transition-[opacity,transform] duration-650 ease-css"
-            style={{ opacity: vis ? 1 : 0, transform: vis ? 'none' : 'translateY(28px)' }}
+            style={{ opacity: vis ? 1 : 0, transform: vis || reduced ? 'none' : 'translateY(28px)' }}
           >
             <div className="mb-7 text-[11px] font-medium tracking-[0.22em] text-muted uppercase">
               The First Step Is The Hardest
@@ -83,9 +75,10 @@ export const Footer = () => {
               <span className="text-accent">Your Goals?</span>
             </h2>
             <button
+              type="button"
               {...accentHover}
               onClick={onCta}
-              className="rounded-btn border-none bg-accent px-10 py-4 text-[13px] font-bold tracking-[.18em] text-on-accent uppercase transition-[transform,box-shadow] duration-200 ease-css md:px-15 md:py-5"
+              className="cursor-pointer rounded-btn border-none bg-accent px-10 py-4 text-[13px] font-bold tracking-[.18em] text-on-accent uppercase transition-[transform,box-shadow] duration-200 ease-css md:px-15 md:py-5"
             >
               Start Your Journey
             </button>
@@ -99,32 +92,54 @@ export const Footer = () => {
           <div className="font-display text-2xl tracking-[.18em] text-text">
             APEX<span className="text-accent-hi">.</span>PERFORMANCE
           </div>
-          <div className="flex flex-wrap gap-4 md:gap-7">
+
+          <nav aria-label="Footer" className="flex flex-wrap gap-4 md:gap-7">
             {footerSections.map((id) => (
               <button
                 key={id}
+                type="button"
                 onClick={() => go(id)}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#888880')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#3E3E3A')}
-                className="border-none bg-transparent text-[11px] font-medium tracking-[.1em] text-faint uppercase transition-colors duration-200"
+                className="cursor-pointer border-none bg-transparent text-[11px] font-medium tracking-[.1em] text-faint uppercase transition-colors duration-200 hover:text-text"
               >
                 {id.charAt(0).toUpperCase() + id.slice(1)}
               </button>
             ))}
-          </div>
+          </nav>
+
+          {/* Were <button>s with no handler. Now real links. */}
           <div className="flex gap-2">
-            <SBtn>
-              <InstagramIcon />
-            </SBtn>
-            <SBtn>
-              <XIcon />
-            </SBtn>
-            <SBtn>
-              <LinkedInIcon />
-            </SBtn>
+            {socials.map(({ name, href }) => {
+              const Icon = SOCIAL_ICONS[name];
+              return (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${name} (opens in a new tab)`}
+                  className="flex h-9 w-9 items-center justify-center rounded-xs border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.04)] transition-colors duration-200 hover:bg-[rgba(255,255,255,.08)]"
+                >
+                  <Icon />
+                </a>
+              );
+            })}
           </div>
         </div>
-        <div className="border-t border-[rgba(255,255,255,.04)] px-14 py-3.5 text-center text-[11px] tracking-[.06em] text-faint">
+
+        {/* Contact strip — the site previously had no clickable phone or email */}
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-[rgba(255,255,255,.04)] px-6 py-4 text-[12px] text-muted">
+          <a href={`tel:${business.phone}`} className="transition-colors hover:text-text">
+            {business.phoneDisplay}
+          </a>
+          <a href={`mailto:${business.email}`} className="transition-colors hover:text-text">
+            {business.email}
+          </a>
+          <span className="text-faint">
+            {business.city}, {business.region}
+          </span>
+        </div>
+
+        <div className="border-t border-[rgba(255,255,255,.04)] px-6 py-3.5 text-center text-[11px] tracking-[.06em] text-faint md:px-14">
           Built by{' '}
           <a
             href="https://confibiz.vercel.app/"
