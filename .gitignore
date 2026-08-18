@@ -10,3 +10,6 @@ dist
 # committed — so a clone builds without them. Keep the masters in shared
 # storage, not in git history.
 media-src/
+
+# Local design-system brief — not published
+CLAUDE.md
