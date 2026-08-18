@@ -1,0 +1,70 @@
+{
+  "coach-portrait": {
+    "width": 1920,
+    "height": 1280
+  },
+  "dumbbell-rack": {
+    "width": 1920,
+    "height": 1280
+  },
+  "tire-flip": {
+    "width": 1280,
+    "height": 1919
+  },
+  "trainer-session": {
+    "width": 1920,
+    "height": 1280
+  },
+  "treadmill": {
+    "width": 1920,
+    "height": 1280
+  },
+  "dumbbells-mat": {
+    "width": 1920,
+    "height": 1280
+  },
+  "trainer-pullup": {
+    "width": 1280,
+    "height": 1919
+  },
+  "client-1-before": {
+    "width": 768,
+    "height": 1376
+  },
+  "client-1-after": {
+    "width": 768,
+    "height": 1376
+  },
+  "client-2-before": {
+    "width": 768,
+    "height": 1376
+  },
+  "client-2-after": {
+    "width": 768,
+    "height": 1376
+  },
+  "client-3-before": {
+    "width": 768,
+    "height": 1376
+  },
+  "client-3-after": {
+    "width": 768,
+    "height": 1376
+  },
+  "avatar-1": {
+    "width": 156,
+    "height": 156
+  },
+  "avatar-2": {
+    "width": 156,
+    "height": 156
+  },
+  "avatar-3": {
+    "width": 156,
+    "height": 156
+  },
+  "avatar-4": {
+    "width": 156,
+    "height": 156
+  }
+}

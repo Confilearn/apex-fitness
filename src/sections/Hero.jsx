@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCounter } from '../hooks/useCounter';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+import { BackdropVideo } from '../components/BackdropVideo';
+import { useIntroGateOpen } from '../lib/introGate';
+import { lift } from '../lib/motion';
+import { onScrollFrame } from '../lib/scroll';
 
 /* ════════════════════════════════════════════════════════════
    2. HERO
@@ -13,6 +18,10 @@ export const Hero = () => {
   const bgRef = useRef(null);
   const heroRef = useRef(null);
   const navigate = useNavigate();
+  const reduced = useReducedMotion();
+  // The intro overlay covers this entirely while it is up; no point competing
+  // for bandwidth with it.
+  const gateOpen = useIntroGateOpen();
   const clients = useCounter(500, 1600, vis);
   const sat = useCounter(99, 1400, vis);
 
@@ -22,33 +31,25 @@ export const Hero = () => {
   }, []);
 
   useEffect(() => {
-    let ticking = false;
-    const fn = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          if (bgRef.current && heroRef.current) {
-            const rect = heroRef.current.getBoundingClientRect();
-            // Section moves up at 100% speed, image at ~85% — the lag reads as depth.
-            const progress = Math.max(0, Math.min(1, -rect.top / window.innerHeight));
-            const offset = progress * window.innerHeight * 0.15;
-            bgRef.current.style.transform = `translateY(${offset}px)`;
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    fn(); // set initial position
-    window.addEventListener('scroll', fn, { passive: true });
-    return () => window.removeEventListener('scroll', fn);
-  }, []);
+    if (reduced) return;
+    return onScrollFrame(() => {
+      if (!bgRef.current || !heroRef.current) return;
+      const rect = heroRef.current.getBoundingClientRect();
+      // Section moves up at 100% speed, image at ~85% — the lag reads as depth.
+      const progress = Math.max(0, Math.min(1, -rect.top / window.innerHeight));
+      bgRef.current.style.transform = `translateY(${progress * window.innerHeight * 0.15}px)`;
+    });
+  }, [reduced]);
 
   // Staggered entrance — per-element delay, so it stays inline.
-  const fd = (d) => ({
-    opacity: vis ? 1 : 0,
-    transform: vis ? 'none' : 'translateY(35px)',
-    transition: `opacity .8s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${d}ms, transform .8s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${d}ms`,
-  });
+  const fd = (d) =>
+    reduced
+      ? { opacity: vis ? 1 : 0, transition: `opacity .4s ease ${d}ms` }
+      : {
+          opacity: vis ? 1 : 0,
+          transform: vis ? 'none' : 'translateY(35px)',
+          transition: `opacity .8s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${d}ms, transform .8s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${d}ms`,
+        };
 
   return (
     <section ref={heroRef} id="hero" className="relative h-screen min-h-[640px] overflow-hidden">
@@ -58,9 +59,7 @@ export const Hero = () => {
           ref={bgRef}
           className="absolute top-[-15%] left-0 h-[130%] w-full brightness-[0.58] contrast-[1.08] will-change-transform"
         >
-          <video autoPlay muted loop playsInline className="block h-full w-full object-cover object-[65%_30%]">
-            <source src="/assets/mixkit-52099-video-52099-full-hd.mp4" type="video/mp4" />
-          </video>
+          <BackdropVideo load={gateOpen} className="block h-full w-full object-cover" />
         </div>
         {/* Directional gradient: dark left → clear right */}
         <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(13,13,11,0.97)_0%,rgba(13,13,11,0.9)_28%,rgba(13,13,11,0.55)_55%,rgba(13,13,11,0.12)_80%,transparent_100%)]" />
@@ -79,16 +78,16 @@ export const Hero = () => {
         <div>
           {/* Mixed weight: light intro / bold accent / light outro */}
           <h1 className="mb-[22px] font-body leading-none tracking-[-0.03em]">
-            <div
+            <span
               style={fd(60)}
-              className="text-[clamp(36px,5vw,72px)] leading-none font-normal whitespace-nowrap text-[rgba(232,224,208,0.82)]"
+              className="block text-[clamp(36px,5vw,72px)] leading-none font-normal whitespace-nowrap text-[rgba(232,224,208,0.82)]"
             >
               Train Hard.
-            </div>
-            <div style={fd(160)} className="text-[clamp(36px,5vw,72px)] leading-none whitespace-nowrap">
+            </span>
+            <span style={fd(160)} className="block text-[clamp(36px,5vw,72px)] leading-none">
               <span className="font-extrabold whitespace-nowrap text-accent">Perform</span>
               <span className="font-normal whitespace-nowrap text-[rgba(232,224,208,0.82)]"> Better.</span>
-            </div>
+            </span>
           </h1>
 
           <div style={fd(310)} className="mb-9 max-w-[440px]">
@@ -100,19 +99,16 @@ export const Hero = () => {
           {/* Pill CTA with arrow circle */}
           <div style={fd(420)}>
             <button
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.03)';
-                e.currentTarget.style.boxShadow = '0 0 36px rgba(214,40,40,0.45)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
+              type="button"
+              {...lift(1.03, '0 0 36px rgba(214,40,40,0.45)')}
               onClick={() => navigate('/get-started')}
               className="inline-flex cursor-pointer items-center gap-3.5 rounded-full border-none bg-accent py-3 pr-3.5 pl-7 text-sm font-semibold text-on-accent transition-[transform,box-shadow] duration-220 ease-css"
             >
               Get Started
-              <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-bg text-[15px] text-accent-hi">
+              <span
+                aria-hidden="true"
+                className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-bg text-[15px] text-accent-hi"
+              >
                 ↗
               </span>
             </button>

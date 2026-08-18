@@ -1,6 +1,50 @@
 @import 'tailwindcss';
 
 /* ════════════════════════════════════════════════════════════
+   FONTS — self-hosted
+   Were two render-blocking requests to fonts.googleapis.com plus the
+   font files from a second origin (fonts.gstatic.com): four DNS/TLS
+   round trips before any text could paint. Same-origin woff2, latin
+   subset only, with the two above-the-fold faces preloaded in
+   index.html so the swap usually never happens.
+
+   Stable filenames rather than hashed ones so the preload links in
+   index.html can name them; they get an immutable cache header in
+   vercel.json, and a font change means a filename change.
+   ════════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/bebas-neue-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('/fonts/dm-sans-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Only fetched once an italic glyph actually renders — the review quotes,
+   which are below the fold. */
+@font-face {
+  font-family: 'DM Sans';
+  font-style: italic;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/dm-sans-latin-italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ════════════════════════════════════════════════════════════
    DESIGN TOKENS
    Ported verbatim from the original :root block. Exposed to
    Tailwind as theme variables so utilities generate from them.
@@ -19,7 +63,14 @@
   /* Type */
   --color-text: #e8e0d0;
   --color-muted: #888880;
-  --color-faint: #3e3e3a;
+  /*
+    Was #3e3e3a, which measures 1.8:1 against the base — invisible to a lot of
+    people, and it carried real content (footer nav, carousel position, the
+    form's privacy note). #7c7c74 is 4.63:1, clearing the 4.5 AA floor for small text.
+  */
+  --color-faint: #7c7c74;
+  /* The old value, kept for genuinely disabled controls, which AA exempts. */
+  --color-disabled: #3e3e3a;
 
   /*
     Accent — CTA, one hero word, nothing else.
@@ -74,6 +125,14 @@
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /*
+    Anchor targets clear the fixed nav on their own, which lets every jump use
+    scrollIntoView() instead of measuring offsetTop by hand.
+  */
+  [id] {
+    scroll-margin-top: 88px;
   }
 
   body {
@@ -287,5 +346,71 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   FOCUS
+   Tailwind's reset removes the UA outline, and nothing replaced it —
+   keyboard users had no indication of where they were. :focus-visible
+   keeps it off for mouse clicks.
+   ════════════════════════════════════════════════════════════ */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-accent-hi);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  /* Cream sections: the accent is too close in value to read on #f2f1eb. */
+  .bg-cream :focus-visible {
+    outline-color: #a31212;
+  }
+
+  /* Skip link — first tab stop on every page. */
+  .skip-link {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    z-index: 10000;
+    transform: translate(-50%, -200%);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    padding: 12px 22px;
+    border-radius: var(--radius-btn);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+  }
+  .skip-link:focus {
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   REDUCED MOTION
+   The site ships parallax, a scaling full-screen video overlay,
+   count-up stats and nine staggered reveal sequences. JS paths check
+   the same query via useReducedMotion; this covers everything CSS
+   drives, including the marquee and the scroll-pulse indicator.
+   ════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Opacity is not what triggers vestibular symptoms — keep those readable. */
+  .reveal-fade {
+    transition-duration: 0.3s !important;
   }
 }

@@ -3,13 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="/assets/icon.svg" />
-  <title>Apex Performance — Train Hard. Perform Better.</title>
+  <meta name="theme-color" content="#0d0d0b" />
 
-  <!-- Fonts: Bebas Neue (hero/stats only) + DM Sans variable (everything else) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300..900;1,9..40,300..700&display=swap" rel="stylesheet" />
+  <title>Apex Performance — Train Hard. Perform Better.</title>
+  <meta name="description" content="Personal training in San Francisco. Strength, conditioning and injury prevention built on structured programming — online coaching from $149/mo, in-person from $249/mo." />
+  <link rel="canonical" href="https://apex-performance.vercel.app/" />
+
+  <!--
+    Baked in rather than set by JS. Social scrapers (Slack, WhatsApp,
+    iMessage, LinkedIn) do not execute JavaScript, so a client-rendered
+    tag reaches them as nothing at all. The Seo component refines these
+    per route for browsers and for crawlers that do render.
+  -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Apex Performance" />
+  <meta property="og:title" content="Apex Performance — Train Hard. Perform Better." />
+  <meta property="og:description" content="Personal training in San Francisco. Strength, conditioning and injury prevention built on structured programming." />
+  <meta property="og:url" content="https://apex-performance.vercel.app/" />
+  <meta property="og:image" content="https://apex-performance.vercel.app/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Apex Performance — Train Hard. Perform Better." />
+  <meta name="twitter:description" content="Personal training in San Francisco. Strength, conditioning and injury prevention built on structured programming." />
+  <meta name="twitter:image" content="https://apex-performance.vercel.app/og-image.jpg" />
+
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+
+  <!-- Self-hosted, same-origin. Preloaded so the swap usually never lands. -->
+  <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body>
   <div id="root"></div>

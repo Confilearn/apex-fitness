@@ -1,19 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useMediaQuery } from './useMediaQuery';
 
 /*
-  Retained only for STRUCTURAL branches — cases where the mobile and
-  desktop trees differ in what renders, not just how it looks:
-  the hamburger/full-screen menu, and the font-size props fed into
-  SvcCard. Pure styling branches use Tailwind `md:` utilities instead.
+  Retained only for STRUCTURAL branches — cases where the mobile and desktop
+  trees differ in what renders, not just how it looks: the hamburger menu and
+  the font-size props fed into SvcCard. Pure styling branches use Tailwind
+  `md:` utilities instead.
+
+  Backed by matchMedia, so a window drag no longer re-renders Nav, About and
+  Services on every resize event.
 */
-export const useMobile = () => {
-  const [mobile, setMobile] = useState(() => window.innerWidth < 768);
-
-  useEffect(() => {
-    const fn = () => setMobile(window.innerWidth < 768);
-    window.addEventListener('resize', fn, { passive: true });
-    return () => window.removeEventListener('resize', fn);
-  }, []);
-
-  return mobile;
-};
+export const useMobile = () => useMediaQuery('(max-width: 767px)');

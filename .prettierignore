@@ -1,0 +1,5 @@
+dist
+node_modules
+media-src
+src/assets
+package-lock.json

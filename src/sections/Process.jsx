@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useInView } from '../hooks/useInView';
 import { useCounter } from '../hooks/useCounter';
-import { reveal } from '../lib/motion';
+import { lift, reveal } from '../lib/motion';
 import { steps } from '../data/content';
+import { Img } from '../components/Img';
 
 /* ════════════════════════════════════════════════════════════
    5. PROCESS
@@ -48,10 +49,13 @@ export const Process = () => {
             style={reveal(vis, 60)}
             className="relative min-h-[200px] overflow-hidden rounded-card col-[1/3] md:min-h-[440px] md:col-1 md:row-[1/3]"
           >
-            <img
-              src="/assets/exercise-weights-iron-dumbbell-with-extra-plates.jpg"
+            {/* Was object-contain, which letterboxed a 4896x3264 landscape inside
+                a tall narrow card. Every other card on the page uses cover. */}
+            <Img
+              name="dumbbells-mat"
               alt=""
-              className="absolute inset-0 block h-full w-full object-contain brightness-[0.45] contrast-[1.15]"
+              sizes="(max-width: 767px) 100vw, 330px"
+              className="absolute inset-0 block h-full w-full object-cover brightness-[0.45] contrast-[1.15]"
             />
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(13,13,11,0.97)_40%,rgba(13,13,11,0.25)_100%)]" />
             <div className="absolute inset-0 flex flex-row items-center justify-around gap-7 p-7 md:flex-col md:items-stretch md:justify-end">
@@ -59,7 +63,7 @@ export const Process = () => {
                 <div className="font-display text-[48px] leading-none tracking-[.03em] text-accent md:text-[72px]">
                   {tfm}+
                 </div>
-                <div className="mt-1.5 text-[11px] font-medium tracking-[0.14em] text-[rgba(232,224,208,0.45)] uppercase">
+                <div className="mt-1.5 text-[11px] font-medium tracking-[0.14em] text-[rgba(232,224,208,0.7)] uppercase">
                   Custom Plans Built
                 </div>
               </div>
@@ -67,7 +71,7 @@ export const Process = () => {
                 <div className="font-display text-[48px] leading-none tracking-[.03em] text-accent md:text-[72px]">
                   {sat}%
                 </div>
-                <div className="mt-1.5 text-[11px] font-medium tracking-[0.14em] text-[rgba(232,224,208,0.45)] uppercase">
+                <div className="mt-1.5 text-[11px] font-medium tracking-[0.14em] text-[rgba(232,224,208,0.7)] uppercase">
                   Consistency Rate
                 </div>
               </div>
@@ -81,7 +85,10 @@ export const Process = () => {
               style={reveal(vis, 100 + i * 60)}
               className="flex flex-col rounded-card border border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.055)] p-5.5"
             >
-              <div className="mb-6 font-display text-[34px] tracking-[.06em] text-[rgba(255,255,255,0.14)]">
+              <div
+                aria-hidden="true"
+                className="mb-6 font-display text-[34px] tracking-[.06em] text-[rgba(255,255,255,0.22)]"
+              >
                 {s.n}
               </div>
               <div className="mb-2 font-body text-[15px] font-bold tracking-[-0.01em] text-text">{s.title}</div>
@@ -94,9 +101,10 @@ export const Process = () => {
             style={reveal(vis, 400)}
             className="relative min-h-[200px] overflow-hidden rounded-card col-[1/3] md:col-auto md:min-h-auto"
           >
-            <img
-              src="/assets/strong-man-training-gym (1).jpg"
+            <Img
+              name="treadmill"
               alt=""
+              sizes="(max-width: 767px) 100vw, 290px"
               className="absolute inset-0 block h-full w-full object-cover object-top brightness-[0.5] contrast-[1.1]"
             />
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(13,13,11,0.97)_30%,rgba(13,13,11,0.4)_100%)]" />
@@ -107,23 +115,20 @@ export const Process = () => {
               <div className="mb-2 font-body text-[clamp(18px,1.9vw,26px)] leading-[1.15] font-extrabold tracking-[-0.02em] text-accent-hi">
                 It&apos;s Method.
               </div>
-              <div className="mb-5 text-[11px] font-normal tracking-[0.04em] text-[rgba(232,224,208,0.4)]">
+              <div className="mb-5 text-[11px] font-normal tracking-[0.04em] text-[rgba(232,224,208,0.7)]">
                 Start Your Journey!
               </div>
               <button
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.04)';
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(214,40,40,0.42)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
+                type="button"
+                {...lift(1.04, '0 0 20px rgba(214,40,40,0.42)')}
                 onClick={() => navigate('/get-started')}
                 className="inline-flex cursor-pointer items-center gap-2 self-start rounded-full border-none bg-accent py-2.5 pr-3 pl-5 text-xs font-bold text-on-accent transition-[transform,box-shadow] duration-200 ease-css"
               >
                 Let&apos;s do it!
-                <span className="flex h-6.5 w-6.5 items-center justify-center rounded-full bg-bg text-xs text-accent-hi">
+                <span
+                  aria-hidden="true"
+                  className="flex h-6.5 w-6.5 items-center justify-center rounded-full bg-bg text-xs text-accent-hi"
+                >
                   ↗
                 </span>
               </button>

@@ -1,27 +1,49 @@
-/*
-  ── About: credential marquee strip ──
-  Declared in the original but never rendered — carried over unused
-  rather than dropped, since no marquee exists to feed it yet.
-*/
+/* ════════════════════════════════════════════════════════════
+   BUSINESS
+   Single source of truth for the details that appear in the markup,
+   the contact links and the LocalBusiness structured data.
+
+   PLACEHOLDERS: phone, email, url and the social handles below are
+   fictional (555-01xx is the reserved range for fiction). Swap them
+   before launch — they are wired up and will be published as-is.
+   ════════════════════════════════════════════════════════════ */
+export const business = {
+  name: 'Apex Performance',
+  coach: 'Marcus Kane',
+  tagline: 'Train Hard. Perform Better.',
+  description:
+    'Personal training in San Francisco. Strength, conditioning and injury prevention built on structured programming — online coaching from $149/mo, in-person from $249/mo.',
+  url: 'https://apex-performance.vercel.app',
+  phone: '+14155550142',
+  phoneDisplay: '(415) 555-0142',
+  email: 'train@apexperformance.example',
+  priceRange: '$$',
+  city: 'San Francisco',
+  region: 'CA',
+};
+
+/* Rendered as real links in About and the footer. */
+export const socials = [
+  { name: 'Instagram', href: 'https://instagram.com/apexperformance' },
+  { name: 'X', href: 'https://x.com/apexperformance' },
+  { name: 'LinkedIn', href: 'https://linkedin.com/company/apexperformance' },
+];
+
+/* ── About: credential marquee strip ── */
 export const creds = [
-  'NASM Certified · ',
-  'ACE Personal Trainer · ',
-  'Strength & Conditioning Specialist · ',
-  'Sports Nutrition · ',
-  'FMS Level 2 · ',
-  'NASM Certified · ',
-  'ACE Personal Trainer · ',
-  'Strength & Conditioning Specialist · ',
-  'Sports Nutrition · ',
-  'FMS Level 2 · ',
+  'NASM Certified',
+  'ACE Personal Trainer',
+  'Strength & Conditioning Specialist',
+  'Sports Nutrition',
+  'FMS Level 2',
 ];
 
 /* ── Services: 4 cards, unequal grid ── */
 export const svcData = [
-  { img: 'dumbbell-rack.jpg', n: '01', title: 'Build Real\nStrength', desc: 'Progressive overload built around your mechanics, not a template.' },
-  { img: 'tire-flip.jpg', n: '02', title: 'Elite\nConditioning', desc: 'Metabolic work that raises your ceiling without burning muscle.' },
-  { img: 'trainer-session.jpg', n: '03', title: 'Injury\nPrevention', desc: 'Movement screening and corrective protocols to keep you in the game.' },
-  { img: 'treadmill.jpg', n: '04', title: 'Expert\nNutrition', desc: 'Practical nutrition built around your life — no dogma, no apps.', icon: true },
+  { img: 'dumbbell-rack', n: '01', title: 'Build Real\nStrength', desc: 'Progressive overload built around your mechanics, not a template.' },
+  { img: 'tire-flip', n: '02', title: 'Elite\nConditioning', desc: 'Metabolic work that raises your ceiling without burning muscle.' },
+  { img: 'trainer-session', n: '03', title: 'Injury\nPrevention', desc: 'Movement screening and corrective protocols to keep you in the game.' },
+  { img: 'treadmill', n: '04', title: 'Expert\nNutrition', desc: 'Practical nutrition built around your life — no dogma, no apps.', icon: true },
 ];
 
 /* ── Process: steps 01–05 ── */
@@ -36,8 +58,8 @@ export const steps = [
 /* ── Client Results: before/after pairs ── */
 export const clientData = [
   {
-    bSrc: '/assets/HPD31Is9b6bBtfNMYkDF_3AEQgQMc.png',
-    aSrc: '/assets/y9rnykbUqH-Sn6mpG-onP_mMs4sRPz.png',
+    before: 'client-1-before',
+    after: 'client-1-after',
     result: '−24 lbs',
     name: 'Sarah M.',
     type: 'In-Person Training',
@@ -45,8 +67,8 @@ export const clientData = [
     quote: 'I came in thinking I just needed motivation. What I got was a real plan — structured training, better habits, actual accountability. Down 24 lbs in 12 weeks and I feel like a different person.',
   },
   {
-    bSrc: '/assets/XXEvMfEzElSH7J8D7M05W_twzYkTdz.png',
-    aSrc: '/assets/e342ocVjsSlKmInsh81MB_tsW4MAsj.png',
+    before: 'client-2-before',
+    after: 'client-2-after',
     result: '+18 lbs muscle',
     name: 'Ryan T.',
     type: 'In-Person Training',
@@ -54,8 +76,8 @@ export const clientData = [
     quote: 'I put on more muscle in 16 weeks than in the previous two years combined. The programming is precise — every set has a purpose. I finally understand what structured training actually means.',
   },
   {
-    bSrc: '/assets/YkQEvrlowjSW_bLeiEWvv_MZkklzr9.png',
-    aSrc: '/assets/gYD0puYAbMYAje6LkvWJs_KKTsOmPD.png',
+    before: 'client-3-before',
+    after: 'client-3-after',
     result: '−31 lbs',
     name: 'Daniel M.',
     type: 'In-Person Training',
@@ -71,28 +93,28 @@ export const reviewData = [
     name: 'Laurie M.',
     type: 'In-Person Training',
     dur: '8 months',
-    photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&q=80',
+    photo: 'avatar-1',
   },
   {
     quote: "I came in thinking I just needed a workout plan. What I got was a complete reset — how I train, eat, recover. Down 28 lbs in 14 weeks and I've kept every pound off.",
     name: 'Nathan R.',
     type: 'In-Person Training',
     dur: '14 weeks',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&q=80',
+    photo: 'avatar-2',
   },
   {
     quote: 'Came back from a lower back injury not knowing what I could safely do. Now I\'m back to full training and stronger than I ever was before the injury. The rehab work was everything.',
     name: 'Elliot L.',
     type: 'Online Training',
     dur: '5 months',
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&q=80',
+    photo: 'avatar-3',
   },
   {
     quote: "Marcus tailors every session and takes recovery seriously. I'm in my forties and honestly in the best shape of my life. Age really is just a number when the programming is right.",
     name: 'Isabella N.',
     type: 'In-Person Training',
     dur: '1 year',
-    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&q=80',
+    photo: 'avatar-4',
   },
 ];
 
@@ -134,4 +156,4 @@ export const gyms = [
 
 /* ── Nav + footer section links ── */
 export const navSections = ['About', 'Services', 'Process', 'Results', 'Pricing'];
-export const footerSections = ['about', 'services', 'process', 'results', 'pricing', 'faq'];
+export const footerSections = ['about', 'services', 'process', 'results', 'reviews', 'pricing', 'faq'];

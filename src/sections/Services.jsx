@@ -1,56 +1,57 @@
-import { useState } from 'react';
 import { useInView } from '../hooks/useInView';
 import { useMobile } from '../hooks/useMobile';
 import { reveal } from '../lib/motion';
 import { svcData } from '../data/content';
 import { Label } from '../components/Label';
+import { Img } from '../components/Img';
 import { PlantIcon } from '../components/icons';
 
-const SvcCard = ({ img, n, title, desc, delay, vis, fontSize, icon, className = '' }) => {
-  const [hov, setHov] = useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      className={`relative overflow-hidden rounded-card ${className}`}
-      style={{
-        opacity: vis ? 1 : 0,
-        transform: vis ? 'none' : 'translateY(28px)',
-        transition: `opacity .55s ease ${delay}ms, transform .55s var(--ease) ${delay}ms`,
-      }}
-    >
-      <img
-        src={`/assets/images/${img}`}
-        alt={title}
-        className={`block h-full w-full object-cover contrast-[1.1] transition-[filter,transform] duration-350 ease-css
-          ${hov ? 'scale-[1.03] brightness-[.8]' : 'scale-100 brightness-[.52]'}`}
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,.92)_0%,rgba(0,0,0,.05)_60%,transparent_100%)]" />
-      <div className="absolute inset-0 flex flex-col justify-end p-7">
-        {icon && (
-          <div className="mb-3">
-            <PlantIcon />
-          </div>
-        )}
-        <div className="mb-2 text-[10px] font-medium tracking-[0.2em] text-[rgba(255,255,255,.36)] uppercase">
-          {n}
+/*
+  Hover was React state, which re-rendered the card on every pointer enter and
+  leave. `group-hover` does the same thing in CSS with no render at all.
+*/
+const SvcCard = ({ img, n, title, desc, delay, vis, fontSize, icon, sizes, className = '' }) => (
+  <div
+    className={`group relative overflow-hidden rounded-card ${className}`}
+    style={{
+      opacity: vis ? 1 : 0,
+      transform: vis ? 'none' : 'translateY(28px)',
+      transition: `opacity .55s ease ${delay}ms, transform .55s var(--ease) ${delay}ms`,
+    }}
+  >
+    {/* Decorative: the service name sits in the DOM as text directly below. */}
+    <Img
+      name={img}
+      alt=""
+      sizes={sizes}
+      className="block h-full w-full object-cover brightness-[.52] contrast-[1.1] transition-[filter,transform]
+        duration-350 ease-css group-hover:scale-[1.03] group-hover:brightness-[.8]"
+    />
+    <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,.92)_0%,rgba(0,0,0,.05)_60%,transparent_100%)]" />
+    <div className="absolute inset-0 flex flex-col justify-end p-7">
+      {icon && (
+        <div className="mb-3">
+          <PlantIcon />
         </div>
-        <div
-          className="mb-2.5 font-body leading-none font-extrabold tracking-[-0.02em] whitespace-pre-line text-text"
-          style={{ fontSize: fontSize || '36px' }}
-        >
-          {title}
-        </div>
-        <div
-          className={`max-w-[220px] text-[13px] leading-[1.55] font-light text-[rgba(232,224,208,.62)] transition-opacity duration-300 ease-css
-            ${hov ? 'opacity-100' : 'opacity-65'}`}
-        >
-          {desc}
-        </div>
+      )}
+      <div className="mb-2 text-[10px] font-medium tracking-[0.2em] text-[rgba(255,255,255,.55)] uppercase">
+        {n}
+      </div>
+      <div
+        className="mb-2.5 font-body leading-none font-extrabold tracking-[-0.02em] whitespace-pre-line text-text"
+        style={{ fontSize: fontSize || '36px' }}
+      >
+        {title}
+      </div>
+      <div
+        className="max-w-[220px] text-[13px] leading-[1.55] font-light text-[rgba(232,224,208,.72)]
+          opacity-80 transition-opacity duration-300 ease-css group-hover:opacity-100"
+      >
+        {desc}
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 /* ════════════════════════════════════════════════════════════
    4. SERVICES
@@ -62,10 +63,16 @@ export const Services = () => {
   const [ref, vis] = useInView(0.1);
   const isMobile = useMobile();
 
+  const wide = '(max-width: 767px) 100vw, 660px';
+  const narrow = '(max-width: 767px) 100vw, 540px';
+
   return (
     <section id="services" ref={ref} className="relative overflow-hidden bg-surface-2 py-20 md:py-40">
       {/* Ghost section counter */}
-      <div className="pointer-events-none absolute top-[-20px] right-10 z-0 hidden font-display text-[clamp(180px,18vw,240px)] leading-none tracking-[.04em] text-[rgba(255,255,255,0.025)] select-none md:block">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-[-20px] right-10 z-0 hidden font-display text-[clamp(180px,18vw,240px)] leading-none tracking-[.04em] text-[rgba(255,255,255,0.025)] select-none md:block"
+      >
         02
       </div>
       <div className="relative z-1 mx-auto max-w-[1200px] px-6 md:px-14">
@@ -94,15 +101,17 @@ export const Services = () => {
             {...svcData[0]}
             delay={0}
             vis={vis}
+            sizes={wide}
             fontSize={isMobile ? '36px' : '52px'}
             className="h-[220px] md:h-auto"
           />
-          <SvcCard {...svcData[1]} delay={80} vis={vis} fontSize="32px" className="h-[200px] md:h-auto" />
-          <SvcCard {...svcData[2]} delay={140} vis={vis} fontSize="32px" className="h-[200px] md:h-auto" />
+          <SvcCard {...svcData[1]} delay={80} vis={vis} sizes={narrow} fontSize="32px" className="h-[200px] md:h-auto" />
+          <SvcCard {...svcData[2]} delay={140} vis={vis} sizes={narrow} fontSize="32px" className="h-[200px] md:h-auto" />
           <SvcCard
             {...svcData[3]}
             delay={200}
             vis={vis}
+            sizes={narrow}
             fontSize={isMobile ? '28px' : '32px'}
             className="h-[200px] md:h-auto"
           />
