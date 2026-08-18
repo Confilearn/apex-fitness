@@ -168,6 +168,33 @@ async function dismissIntro(page) {
     const expanded = await page.$eval('button[aria-controls="mobile-menu"]', (b) => b.getAttribute('aria-expanded'));
     record('mobile menu reports expanded', expanded === 'true', String(expanded));
   }
+  /*
+    Horizontal overflow guard. body{overflow-x:hidden} hides the scrollbar but
+    not the consequences: the document box still widens, and a fixed element's
+    left:50% then resolves against the overflow area instead of the viewport,
+    which silently drags the nav pill off-centre on every page.
+  */
+  const box = await page.evaluate(() => {
+    const de = document.documentElement;
+    const nav = document.querySelector('nav[aria-label="Main"]').getBoundingClientRect();
+    return {
+      viewport: de.clientWidth,
+      scrollWidth: de.scrollWidth,
+      leftGap: Math.round(nav.left),
+      rightGap: Math.round(de.clientWidth - nav.right),
+    };
+  });
+  record(
+    'mobile has no horizontal overflow',
+    box.scrollWidth <= box.viewport,
+    `viewport ${box.viewport}, scrollWidth ${box.scrollWidth}`
+  );
+  record(
+    'mobile nav pill is centred',
+    Math.abs(box.leftGap - box.rightGap) <= 1,
+    `left ${box.leftGap}px vs right ${box.rightGap}px`
+  );
+
   record('mobile no console errors', errors.length === 0, errors.slice(0, 2).join(' | '));
   await page.close();
 }

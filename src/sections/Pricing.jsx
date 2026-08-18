@@ -20,13 +20,18 @@ const PlanCard = ({ plan, delay, vis }) => {
         ${plan.badge ? 'border-[rgba(255,255,255,.16)] bg-[rgba(255,255,255,0.05)]' : 'border-[rgba(255,255,255,.07)] bg-[rgba(255,255,255,0.02)]'}`}
       style={{ opacity: vis ? 1 : 0, transitionDelay: `${delay}ms` }}
     >
+      {/*
+        Absolute at md+, but in normal flow on a phone: at 342px the card is
+        too narrow for the badge and the plan name to share a line, and the
+        heading ran underneath it.
+      */}
       {plan.badge && (
-        <div className="absolute top-5 right-5 flex items-center gap-[5px] rounded-full border border-[rgba(255,75,75,.35)] bg-[rgba(214,40,40,.12)] px-3 py-[5px] text-[9px] font-semibold tracking-[.2em] text-accent-hi uppercase">
+        <div className="mb-3 flex w-fit items-center gap-[5px] rounded-full border border-[rgba(255,75,75,.35)] bg-[rgba(214,40,40,.12)] px-3 py-[5px] text-[9px] font-semibold tracking-[.2em] text-accent-hi uppercase md:absolute md:top-5 md:right-5 md:mb-0">
           <TrophyIcon />
           Most Effective
         </div>
       )}
-      <h3 className="mb-2 font-body text-[22px] font-bold tracking-[-0.01em] text-text">
+      <h3 className="mb-2 font-body text-[22px] font-bold tracking-[-0.01em] text-text md:pr-36">
         {plan.name} Training
       </h3>
       <div className="mb-5 flex items-baseline gap-1">
@@ -78,9 +83,17 @@ export const Pricing = () => {
           {plans.map((plan, i) =>
             plan.badge ? (
               <div key={plan.name} className="relative">
+                {/*
+                  -inset-10 is 40px, but the page gutter is only px-6 (24px),
+                  so on a phone the bloom hung 16px past the viewport on each
+                  side. That widened the document to 406px, and because a
+                  fixed element's `left-1/2` resolves against the overflow
+                  area rather than the viewport, it dragged the nav pill
+                  16px off-centre on every page. Keep it inside the gutter.
+                */}
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute -inset-10 z-0 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(214,40,40,0.13)_0%,transparent_70%)]"
+                  className="pointer-events-none absolute -inset-5 z-0 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(214,40,40,0.13)_0%,transparent_70%)] md:-inset-10"
                 />
                 <div className="relative z-1">
                   <PlanCard plan={plan} delay={i * 100} vis={vis} />
